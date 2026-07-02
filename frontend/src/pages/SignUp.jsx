@@ -10,13 +10,12 @@ const SignUp = () => {
   const [emailId,setEmailId] = useState("")
   const [password,setPassword] = useState("")
   const navigate = useNavigate()
-  const {error,loading,isAuthenticated,user} = useSelector((state)=>state.auth)
+  const {error,loading,isAuthenticated} = useSelector((state)=>state.auth)
   const dispatch = useDispatch()
 
   const handleSignUp = (e)=>{
     e.preventDefault()
     dispatch(signup({userName,emailId,password}))
-    console.log("signup dispatched")
   }
 
   useEffect(() => {
@@ -27,7 +26,7 @@ const SignUp = () => {
 
   if(error){
     return (
-      <Error message={error} setError={setError} />
+      <Error message={error} />
     )
   }
   return (
