@@ -153,25 +153,25 @@ export const checkAuth = async(req,res)=>{
   try {
     const {token} = req.cookies
     if(!token){
-      return res.status(400).json({
+      return res.status(401).json({
         message:"Invalid Token"
       })
     }
     const payload = jwt.verify(token,JWT_SECRET_KEY)
     if(!payload){
-      return res.status(400).json({
+      return res.status(401).json({
         message:"Invalid Token"
       })
     }
     const {userId} = payload
     if(!userId){
-      return res.status(400).json({
+      return res.status(401).json({
         message:"Invalid Token"
       })
     }
     const user = await User.findById(userId).select("-password")
     if(!user){
-      return res.status(400).json({
+      return res.status(401).json({
         message:"User not found"
       })
     }

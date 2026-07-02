@@ -1,0 +1,71 @@
+import React ,{useRef, useState} from 'react'
+import { useSelector } from 'react-redux'
+import dp from "../assets/dp.jpg"
+import { IoCameraOutline } from "react-icons/io5";
+import axiosClient from '../utils/axiosClient';
+import Error from '../component/Error';
+const Profile = () => {
+    const [name,setName] = useState("")
+    const [loading,setLoading] = useState(false)
+    const {user} = useSelector(state=>state.auth)
+    const [image,setImage] = useState(user?.image||null)
+    const [file,setFile] = useState("")
+    const imageRef = useRef()
+    const [error,setError] = useState(null)
+    const handleImageChange = (e)=>{
+        const file = e.target.files[0]
+        setImage(URL.createObjectURL(file))
+        setFile(file)
+    }
+    const handleSaveProfile = async()=>{
+        setLoading(true)
+        try {
+            const formData = new FormData()
+            formData.append("image",file)
+            const result = await axiosClient.post("/api/user/saveprofile",formData)
+            console.log(result)
+        } catch (error) {
+            console.log(error?.response?.data?.message)
+            setError(error?.response?.data?.message)
+        }
+        finally{
+            setLoading(false)
+        }
+    }
+    if(error){
+        return (
+            <Error message={error}/>
+        )
+    }
+  return (
+    <div className='bg-blue-200 w-screen h-screen flex justify-center items-center'>
+        <div className='max-w-[500px] w-full'>
+            <div className='relative rounded-full overflow-hidden my-[30px] w-[200px] h-[200px] mx-auto'>
+                <div onClick={(e)=>{e.stopPropagation()
+                    imageRef.current.click()}} className='z-[50] cursor-pointer absolute bottom-2 right-3 p-[10px] flex justify-center items-center  rounded-full  text-2xl  bg-blue-400 text-white font-semibold'>
+                <IoCameraOutline />
+                </div>
+                <img src={image||dp} className='h-full w-full' alt="" /> 
+                <input type="file" accept='image/*' onChange={handleImageChange} ref={imageRef} />
+            </div>
+
+            <form onClick={handleSaveProfile} className='flex flex-col gap-[10px]'>
+                <div className='form-control border-2 border-blue-400 rounded-md p-[10px] bg-white'>
+                <input value={name} onChange={(e)=>setName(e.target.value)} type="email" placeholder='Enter your name' className='w-full h-full outline-none border-0'/>
+              </div>
+                <div className='form-control border-2 border-blue-400 rounded-md p-[10px] bg-white'>
+                <input value={user?.userName} readOnly type="text" className='w-full h-full outline-none border-0'/>
+              </div>
+                <div className='form-control border-2 border-blue-400 rounded-md p-[10px] bg-white'>
+                <input value={user?.emailId} readOnly type="email" placeholder='email' className='w-full h-full outline-none border-0'/>
+              </div>
+              <div className='flex justify-center mt-[30px]'>
+                <button type='submit' className='cursor-pointer bg-blue-400 p-2 font-semibold max-w-[150px] w-full text-blue-950 rounded-md'>{loading?"Loading...":"Save Profile"}</button>
+              </div>
+            </form>
+        </div>
+    </div>
+  )
+}
+
+export default Profile
