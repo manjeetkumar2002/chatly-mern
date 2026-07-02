@@ -1,26 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState ,useEffect } from 'react'
 import { NavLink, useNavigate } from "react-router-dom";
 import axiosClient from '../utils/axiosClient';
 import Error from '../component/Error';
+import { signup } from '../store/authSlice';
+import {useDispatch,useSelector} from "react-redux"
 const SignUp = () => {
   const [showPassword,setShowPassword] = useState(false)
   const [userName,setUserName] = useState("")
   const [emailId,setEmailId] = useState("")
   const [password,setPassword] = useState("")
-  const [error,setError] = useState(null)
   const navigate = useNavigate()
-  const handleSignUp = async(e)=>{
+  const {error,loading,isAuthenticated,user} = useSelector((state)=>state.auth)
+  const dispatch = useDispatch()
+
+  const handleSignUp = (e)=>{
     e.preventDefault()
-    try {
-      
-      const result = await axiosClient.post("/api/auth/signup",{userName,emailId,password})
-      console.log(result.data)
-      navigate("/")
-    } catch (error) {
-      console.log(error.response.data.message)
-      setError(error.response.data.message)
-    }
+    dispatch(signup({userName,emailId,password}))
+    console.log("signup dispatched")
   }
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated,navigate]);
+
   if(error){
     return (
       <Error message={error} setError={setError} />
@@ -46,7 +50,7 @@ const SignUp = () => {
                 </span>
               </div>
               <div className='flex justify-center mt-[30px]'>
-                <button type='submit' className='cursor-pointer bg-blue-400 p-2 font-semibold max-w-[100px] w-full text-blue-950 rounded-md'>Sign Up</button>
+                <button type='submit' className='cursor-pointer bg-blue-400 p-2 font-semibold max-w-[100px] w-full text-blue-950 rounded-md'>{loading?"Loading...":"Sign Up"}</button>
               </div>
               <div>
                 <p className='text-center'>Already Have An Account? <NavLink to="/login" className="text-blue-400">Login</NavLink></p>

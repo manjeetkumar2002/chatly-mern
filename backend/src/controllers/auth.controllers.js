@@ -10,6 +10,7 @@ export const signup = async (req, res) => {
     validate(req.body);
     // step1 :validate the data
     const {userName, emailId, password } = req.body;
+    console.log(req.body)
     const existingUser = await User.findOne({
       $or: [{ emailId }, { userName }],
     });
