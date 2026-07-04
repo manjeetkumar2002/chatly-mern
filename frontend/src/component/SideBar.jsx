@@ -1,6 +1,7 @@
 import React ,{useState} from 'react'
 import {useDispatch, useSelector} from "react-redux"
 import dp from "../assets/dp.jpg"
+import {useNavigate} from "react-router-dom"
 import { CiSearch } from "react-icons/ci";
 import { RxCross2 } from "react-icons/rx";
 import { CiLogout } from "react-icons/ci";
@@ -9,6 +10,7 @@ const SideBar = () => {
   const {user} = useSelector(state=>state.auth)
   const [search,setSearch] = useState(false)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   return (
     <div className='w-full max-w-[30%] bg-blue-100 h-full'>
       <div className='bg-blue-400 h-[250px] rounded-b-[100px] shadow-md flex justify-center flex-col p-[20px]'>
@@ -16,7 +18,7 @@ const SideBar = () => {
         
         <div className='mt-1 flex justify-between items-center'>
           <h2 className='font-bold text-2xl'>Hii, {user?.name}</h2>
-          <div  className='cursor-pointer shadow-sm shadow-black bg-white h-[50px] w-[50px] rounded-full overflow-hidden flex items-center justify-center'>
+          <div onClick={()=>navigate("/profile")}  className='cursor-pointer shadow-sm shadow-black bg-white h-[50px] w-[50px] rounded-full overflow-hidden flex items-center justify-center'>
             <img className='h-full w-full' src={user?.image || dp} alt="" />
           </div>
         </div>

@@ -49,7 +49,7 @@ const SignUp = () => {
                 </span>
               </div>
               <div className='flex justify-center mt-[30px]'>
-                <button type='submit' className='cursor-pointer bg-blue-400 p-2 font-semibold max-w-[100px] w-full text-blue-950 rounded-md'>{loading?"Loading...":"Sign Up"}</button>
+                <button disabled={loading} type='submit' className='cursor-pointer bg-blue-400 p-2 font-semibold max-w-[100px] w-full text-blue-950 rounded-md'>{loading?"signing...":"Sign Up"}</button>
               </div>
               <div>
                 <p className='text-center'>Already Have An Account? <NavLink to="/login" className="text-blue-400">Login</NavLink></p>

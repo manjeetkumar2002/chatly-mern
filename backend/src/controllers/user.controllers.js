@@ -20,3 +20,22 @@ export const editProfile = async (req,res)=>{
         });
     }
 }
+
+
+export const getOtherUsers =async (req,res)=>{
+    try {
+        const result = await User.find({
+            _id:{$ne:req.userId}
+        })
+        return res.status(200).json(result)
+    } catch (error) {
+         console.error(error);
+        return res.status(500).json({
+        success: false,
+        message:
+            process.env.NODE_ENV === "development"
+            ? error.message
+            : "Internal Server Error",
+        });
+    }
+}

@@ -44,7 +44,7 @@ const Login = () => {
                 </span>
               </div>
               <div className='flex justify-center mt-[30px]'>
-                <button type='submit' className='cursor-pointer bg-blue-400 p-2 font-semibold max-w-[100px] w-full text-blue-950 rounded-md'>{loading?"Loading...":"Sign Up"}</button>
+                <button disabled={loading} type='submit' className='cursor-pointer bg-blue-400 p-2 font-semibold max-w-[100px] w-full text-blue-950 rounded-md'>{loading?"login...":"Login"}</button>
               </div>
               <div>
                 <p className='text-center'>Want to create a new account? <NavLink to="/signup" className="text-blue-400">sign up</NavLink></p>

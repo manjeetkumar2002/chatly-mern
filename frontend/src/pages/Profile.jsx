@@ -4,14 +4,17 @@ import dp from "../assets/dp.jpg"
 import { IoCameraOutline } from "react-icons/io5";
 import axiosClient from '../utils/axiosClient';
 import Error from '../component/Error';
+import { FaArrowLeft } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
 const Profile = () => {
-    const [name,setName] = useState("")
-    const [loading,setLoading] = useState(false)
     const {user} = useSelector(state=>state.auth)
+    const [name,setName] = useState(user?.name||"")
+    const [loading,setLoading] = useState(false)
     const [image,setImage] = useState(user?.image||null)
     const [file,setFile] = useState("")
     const imageRef = useRef()
     const [error,setError] = useState(null)
+    const navigate = useNavigate()
     const handleImageChange = (e)=>{
         const file = e.target.files[0]
         setImage(URL.createObjectURL(file))
@@ -46,16 +49,21 @@ const Profile = () => {
     }
   return (
     <div className='bg-blue-200 w-screen h-screen flex justify-center items-center'>
+        <div onClick={()=>navigate("/")} className='cursor-pointer rounded-full h-[50px] w-[50px] bg-blue-400 text-white font-semibold text-xl flex items-center justify-center fixed top-3 left-3'>
+    <FaArrowLeft/>
+        </div>
         <div className='max-w-[500px] w-full'>
-            <div className='relative rounded-full overflow-hidden my-[30px] w-[200px] h-[200px] mx-auto'>
-                <div onClick={(e)=>{e.stopPropagation()
-                    imageRef.current.click()}} className='z-[50] cursor-pointer absolute bottom-2 right-3 p-[10px] flex justify-center items-center  rounded-full  text-2xl  bg-blue-400 text-white font-semibold'>
-                <IoCameraOutline />
+            <div className='rounded-full relative w-[200px] h-[200px] my-[30px] mx-auto'>
+            <div className='overflow-hidden rounded-full h-full  border-4 border-blue-400' >
+                <img src={image||dp} className='object-cover h-full w-full' alt="" /> 
+                <input className='hidden' type="file" accept='image/*' onChange={handleImageChange} ref={imageRef} />
+                
                 </div>
-                <img src={image||dp} className='h-full w-full' alt="" /> 
-                <input type="file" accept='image/*' onChange={handleImageChange} ref={imageRef} />
+                <div onClick={(e)=>{e.stopPropagation()
+                    imageRef.current.click()}} className='z-100 cursor-pointer absolute bottom-2 right-3 p-[10px] flex justify-center items-center  rounded-full  text-2xl  bg-blue-400 text-white font-semibold'>
+                <IoCameraOutline />
             </div>
-
+</div>
             <form onSubmit={handleSaveProfile} className='flex flex-col gap-[10px]'>
                 <div className='form-control border-2 border-blue-400 rounded-md p-[10px] bg-white'>
                 <input value={name} onChange={(e)=>setName(e.target.value)} type="text" placeholder='Enter your name' className='w-full h-full outline-none border-0'/>
@@ -67,7 +75,7 @@ const Profile = () => {
                 <input value={user?.emailId} readOnly type="email" placeholder='email' className='w-full h-full outline-none border-0'/>
               </div>
               <div className='flex justify-center mt-[30px]'>
-                <button type='submit' className='cursor-pointer bg-blue-400 p-2 font-semibold max-w-[150px] w-full text-blue-950 rounded-md'>{loading?"Loading...":"Save Profile"}</button>
+                <button disabled={loading} type='submit' className='cursor-pointer bg-blue-400 p-2 font-semibold max-w-[150px] w-full text-blue-950 rounded-md'>{loading?"Saving...":"Save Profile"}</button>
               </div>
             </form>
         </div>
