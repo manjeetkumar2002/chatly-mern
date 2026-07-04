@@ -1,9 +1,12 @@
 import React, { useEffect } from 'react'
-
+import SideBar from '../component/SideBar.jsx'
+import MessageArea from '../component/MessageArea.jsx'
 const Home = () => {
-  
   return (
-    <div>Home</div>
+    <div className='flex h-screen'>
+      <SideBar></SideBar>
+      <MessageArea></MessageArea>
+    </div>
   )
 }
 

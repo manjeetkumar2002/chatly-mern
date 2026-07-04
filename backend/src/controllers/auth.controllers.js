@@ -114,6 +114,7 @@ export const login = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
+  console.log("logout")
   try {
     const { token } = req.cookies;
     if (!token) {

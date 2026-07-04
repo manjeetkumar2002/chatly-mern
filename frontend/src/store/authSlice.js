@@ -23,7 +23,18 @@ export const login = createAsyncThunk(
     }
   }
 );
-
+export const logout = createAsyncThunk(
+  'auth/logout',
+  async(_,{rejectWithValue})=>{
+    console.log("logout api called")
+    try {
+      const response = await axiosClient.get("/api/auth/logout")
+      return null
+    } catch (error) {
+      return rejectWithValue({message:error?.response?.data?.message})      
+    }
+  }
+)
 export const checkAuth = createAsyncThunk(
   'auth/check',
   async (_,{rejectWithValue})=>{
@@ -78,6 +89,22 @@ const authSlice = createSlice({
         state.isAuthenticated = !!action.payload
       })
       .addCase(login.rejected,(state,action)=>{
+        state.loading=false,
+        state.error = action.payload?.message || "something went wrong",
+        state.isAuthenticated = false,
+        state.user = null
+      })
+      // logout cases
+      .addCase(logout.pending,(state)=>{
+        state.loading=true,
+        state.error=null
+      })
+      .addCase(logout.fulfilled,(state,action)=>{
+        state.loading=false,
+        state.user = null,
+        state.isAuthenticated = false
+      })
+      .addCase(logout.rejected,(state,action)=>{
         state.loading=false,
         state.error = action.payload?.message || "something went wrong",
         state.isAuthenticated = false,
