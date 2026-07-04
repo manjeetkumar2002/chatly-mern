@@ -1,6 +1,6 @@
-const jwt = require("jsonwebtoken")
-const User = require("../models/user")
-const redisClient = require("../config/redis")
+import jwt from "jsonwebtoken"
+import User from "../models/user.model.js"
+import redisClient from "../config/redis.js"
 //  middleware for validating the token
 const userMiddleware = async (req,res,next)=>{
     try{
@@ -11,18 +11,18 @@ const userMiddleware = async (req,res,next)=>{
 
         // validate the token using jwt
         // we generate this token using JWT_KEY,so verify it using key
-        const payload = jwt.verify(token,process.env.JWT_KEY)
+        const payload = jwt.verify(token,process.env.JWT_SECRET_KEY)
         
         //  payload contain the data we added during token creation 
-        const {_id} = payload
-        if(!_id){
+        const {userId} = payload
+        if(!userId){
             throw new Error("Invalid token")
         }
 
         // find the user if id present in token
-        const result = await User.findOne({_id})
+        const user = await User.findById(userId)
 
-        if(!result){
+        if(!user){
             throw new Error("User doesnt exist")
         }
 
@@ -34,7 +34,7 @@ const userMiddleware = async (req,res,next)=>{
         }
 
         // store the result if token not present in redis
-        req.result = result
+        req.userId = user._id
         next()
     }
     catch(err){
@@ -43,4 +43,4 @@ const userMiddleware = async (req,res,next)=>{
 }
 
 
-module.exports = userMiddleware
+export default userMiddleware

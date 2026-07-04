@@ -17,12 +17,19 @@ const Profile = () => {
         setImage(URL.createObjectURL(file))
         setFile(file)
     }
-    const handleSaveProfile = async()=>{
+    const handleSaveProfile = async(e)=>{
+        e.preventDefault()
         setLoading(true)
         try {
+
             const formData = new FormData()
+            formData.append("name",name)
             formData.append("image",file)
-            const result = await axiosClient.post("/api/user/saveprofile",formData)
+            const result = await axiosClient.put("/api/user/profile",formData,{
+                headers: {
+    "Content-Type": "multipart/form-data" 
+  }
+            })
             console.log(result)
         } catch (error) {
             console.log(error?.response?.data?.message)
@@ -49,9 +56,9 @@ const Profile = () => {
                 <input type="file" accept='image/*' onChange={handleImageChange} ref={imageRef} />
             </div>
 
-            <form onClick={handleSaveProfile} className='flex flex-col gap-[10px]'>
+            <form onSubmit={handleSaveProfile} className='flex flex-col gap-[10px]'>
                 <div className='form-control border-2 border-blue-400 rounded-md p-[10px] bg-white'>
-                <input value={name} onChange={(e)=>setName(e.target.value)} type="email" placeholder='Enter your name' className='w-full h-full outline-none border-0'/>
+                <input value={name} onChange={(e)=>setName(e.target.value)} type="text" placeholder='Enter your name' className='w-full h-full outline-none border-0'/>
               </div>
                 <div className='form-control border-2 border-blue-400 rounded-md p-[10px] bg-white'>
                 <input value={user?.userName} readOnly type="text" className='w-full h-full outline-none border-0'/>
