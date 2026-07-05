@@ -5,6 +5,7 @@ import SignUp from './pages/SignUp'
 import Login from './pages/Login'
 import { useSelector,useDispatch } from 'react-redux'
 import { checkAuth } from './store/authSlice'
+import { getOtherUsers } from './store/userSlice'
 import Profile from './pages/Profile'
 const App = () => {
   const dispatch = useDispatch();
@@ -15,6 +16,12 @@ const App = () => {
     dispatch(checkAuth());
   }, [dispatch]);
   
+  useEffect(()=>{
+    if(isAuthenticated){
+       dispatch(getOtherUsers())
+    }
+  },[dispatch,isAuthenticated])
+
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center">
       <span className="loading loading-spinner loading-lg"></span>
