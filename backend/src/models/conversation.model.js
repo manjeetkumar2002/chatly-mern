@@ -8,9 +8,10 @@ const conversationSchema = new Schema({
             required:true
         }
     ],
-    conversation:[
+    messages:[
         {
-            type:String,
+            type:Schema.Types.ObjectId,
+            ref:"Message",
             required:true
         }
     ]
