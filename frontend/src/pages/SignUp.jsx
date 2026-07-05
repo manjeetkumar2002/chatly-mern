@@ -32,7 +32,7 @@ const SignUp = () => {
   return (
    <div className='w-screen h-screen bg-blue-200 flex justify-center items-center'>
       <div className='max-w-[500px] overflow-hidden shadow-xl/20 rounded-xl w-full mx-auto bg-white'>
-        <div className='p-[80px] bg-blue-400 rounded-b-[60px] shadow-2xl flex justify-center items-center'>
+        <div className='h-[220px] bg-blue-400 rounded-b-[60px] shadow-2xl flex justify-center items-center'>
           <p className='text-3xl font-semibold text-blue-950'>Welcome to <span className='text-white'>chatly</span></p>
         </div>
           <form onSubmit={handleSignUp} className='mt-[20px] px-3 pb-[50px] flex flex-col gap-[10px]'>

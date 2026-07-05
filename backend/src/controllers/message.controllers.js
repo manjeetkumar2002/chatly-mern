@@ -1,14 +1,14 @@
 import Message from "../models/message.model.js"
 import Conversation from "../models/conversation.model.js"
 import uploadOnCloudinary from "../config/cloudinary.js"
-export const sendMessage=(req,res)=>{
+export const sendMessage=async (req,res)=>{
     try {
         const sender = req.userId
         const receiver = req.params
         const message = req.body
         let image;
         if(req.file){
-            image = await uploadOnCloudinary(req.file.path)
+            image = uploadOnCloudinary(req.file.path)
         }
         const newMessage = await Message.create({sender,receiver,message,image})
         const conversation = await Conversation.find({
@@ -38,7 +38,7 @@ export const sendMessage=(req,res)=>{
     }
 }
 
-export const getMessages = (req,res)=>{
+export const getMessages = async(req,res)=>{
     try {
         const sender = req.userId
         const receiver = req.params

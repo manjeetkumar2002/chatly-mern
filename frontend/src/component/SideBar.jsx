@@ -9,21 +9,21 @@ import {logout} from "../store/authSlice.js"
 import { setSelectedUser } from '../store/userSlice.js';
 const SideBar = () => {
   const {user} = useSelector(state=>state.auth)
-  const {otherUsers} = useSelector(state=>state.user)
+  const {otherUsers,selectedUser} = useSelector(state=>state.user)
   const [search,setSearch] = useState(false)
   const dispatch = useDispatch()
   const navigate = useNavigate()
-
+  
   useEffect(()=>{
 
   },[user])
   return (
-    <div className='w-full max-w-[30%] bg-blue-100 h-full'>
+    <div className={`w-full lg:max-w-[30%] md:max-w-[40%] max-w-[100%] ${selectedUser?"hidden md:block":"block"} bg-blue-100 h-screen relative`}>
       <div className='bg-blue-400 h-[250px] rounded-b-[100px] shadow-md flex justify-center flex-col p-[20px]'>
         <h1 className='font-semibold text-xl text-white'>chatly</h1>
         
         <div className='mt-1 flex justify-between items-center'>
-          <h2 className='font-bold text-2xl'>Hii, {user?.name || "User"}</h2>
+          <h2 className='font-bold text-[24px]'>Hii, {user?.name || "User"}</h2>
           <div onClick={()=>navigate("/profile")}  className='cursor-pointer shadow-sm shadow-lg bg-white h-[50px] w-[50px] rounded-full overflow-hidden flex items-center justify-center'>
             <img className='h-full w-full' src={user?.image || dp} alt="" />
           </div>
@@ -59,7 +59,7 @@ const SideBar = () => {
             }
         </div>
             {/* logout icon */}
-      <div onClick={()=>dispatch(logout())} className='fixed bottom-2 left-2 cursor-pointer rounded-full bg-blue-400 flex items-center justify-center text-2xl p-2'>
+      <div onClick={()=>dispatch(logout())} className='absolute bottom-2 left-2 cursor-pointer rounded-full bg-blue-400 flex items-center justify-center text-2xl p-2'>
         <CiLogout />
       </div>
     </div>
