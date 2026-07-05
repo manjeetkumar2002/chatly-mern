@@ -3,26 +3,30 @@ import Conversation from "../models/conversation.model.js"
 import uploadOnCloudinary from "../config/cloudinary.js"
 export const sendMessage=async (req,res)=>{
     try {
+        console.log(req.body)
         const sender = req.userId
-        const receiver = req.params
-        const message = req.body
+        const {receiver} = req.params
+        const {message} = req.body
+        console.log(message)
+        console.log(req.file)
         let image;
         if(req.file){
-            image = uploadOnCloudinary(req.file.path)
+            image = await uploadOnCloudinary(req.file.path)
+            console.log(image)
         }
         const newMessage = await Message.create({sender,receiver,message,image})
-        const conversation = await Conversation.find({
+        let conversation = await Conversation.findOne({
             participants:{$all:[sender,receiver]}
         })
 
         if(!conversation){
             conversation = await Conversation.create({
                 participants:[sender,receiver],
-                messages:[newMessage]
+                messages:[newMessage._id]
             })
         }
         else{
-            conversation.messages.push(newMessage);
+            conversation.messages.push(newMessage._id);
             await conversation.save()
         }
         return res.status(201).json(newMessage)
@@ -41,7 +45,7 @@ export const sendMessage=async (req,res)=>{
 export const getMessages = async(req,res)=>{
     try {
         const sender = req.userId
-        const receiver = req.params
+        const {receiver} = req.params
 
         const conversation = await Conversation.find({participants:[sender,receiver]})
 
