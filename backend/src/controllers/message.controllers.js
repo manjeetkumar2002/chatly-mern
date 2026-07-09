@@ -47,12 +47,14 @@ export const getMessages = async(req,res)=>{
         const sender = req.userId
         const {receiver} = req.params
 
-        const conversation = await Conversation.find({participants:[sender,receiver]})
-
+        const conversation = await Conversation.findOne({
+            participants: { $all: [sender, receiver] }
+        })
+        .populate("messages");
         if(!conversation){
             return res.status(400).json({message:"conversation not found!"})
         }
-
+        
         return res.status(200).json(conversation.messages)
     } catch (error) {
         console.error(error)

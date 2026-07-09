@@ -8,8 +8,11 @@ import { FaRegImages } from "react-icons/fa";
 import EmojiPicker from 'emoji-picker-react';
 import { IoMdSend } from "react-icons/io";
 import axiosClient from '../utils/axiosClient';
+import ReceiverMessage from './ReceiverMessage';
+import SenderMessage from './SenderMessage';
 const MessageArea = () => {
-  const {selectedUser} = useSelector(state=>state.user)
+  const {selectedUser,selectedUserChat} = useSelector(state=>state.user)
+  const {user} = useSelector(state=>state.auth)
   const dispatch = useDispatch()
   const [message,setMessage] = useState("")
   const image = useRef()
@@ -72,7 +75,8 @@ const MessageArea = () => {
       </div>
     }
     {/* messages  */}
-    <div className='relative w-full h-[600px] overflow-auto'>
+    {
+      selectedUser && <div className='relative w-full h-[570px] px-[50px] py-[20px] flex flex-col gap-[30px] overflow-auto'>
         {showEmoji && 
         <div className='absolute bottom-1 left-[50px]'>
           <EmojiPicker onEmojiClick={handleEmoji}  width={250} height={350}/>
@@ -83,7 +87,16 @@ const MessageArea = () => {
           <img src={frontendImage} className='h-full w-full object-cover' alt="" />
         </div>
         }
+
+        {/* user messages mapping */}
+        {
+          selectedUser && selectedUserChat?.map((chat,index)=>(
+            chat.sender === user._id ? <SenderMessage image={chat.image} message={chat.message}/>:<ReceiverMessage image={chat.image} message={chat.message}/>
+          ))
+        }
     </div>
+    }
+    
     {/* message input */}
     {selectedUser && <div className='flex justify-center'>
     <div className='max-w-[90%] w-full mx-auto absolute bottom-3 bg-blue-400 text-white p-[15px] rounded-full w-full gap-[10px] items-center flex justify-between'>

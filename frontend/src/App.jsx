@@ -6,11 +6,12 @@ import Login from './pages/Login'
 import { useSelector,useDispatch } from 'react-redux'
 import { checkAuth } from './store/authSlice'
 import { getOtherUsers } from './store/userSlice'
+import {getSelectedUserChat} from "./store/userSlice"
 import Profile from './pages/Profile'
 const App = () => {
   const dispatch = useDispatch();
   const {isAuthenticated,user,loading} = useSelector((state)=>state.auth);
-
+  const {selectedUser} = useSelector(state=>state.user)
   // check initial authentication
   useEffect(() => {
     dispatch(checkAuth());
@@ -21,7 +22,12 @@ const App = () => {
        dispatch(getOtherUsers())
     }
   },[dispatch,isAuthenticated])
-
+  useEffect(()=>{
+    if(isAuthenticated&&selectedUser){
+      dispatch(getSelectedUserChat(selectedUser._id))
+      console.log("dispatch chat")
+    }
+  },[dispatch,isAuthenticated,selectedUser])
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center">
       <span className="loading loading-spinner loading-lg"></span>

@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosClient from "../utils/axiosClient";
+import { useSelector } from "react-redux";
 
 export const getOtherUsers = createAsyncThunk(
     "user/others",
@@ -12,17 +13,31 @@ export const getOtherUsers = createAsyncThunk(
         }
     }
 )
-
+export const getSelectedUserChat = createAsyncThunk(
+    'user/chat',
+    async(userId,{rejectWithValue})=>{
+        try {
+            console.log(userId)
+            const result = await axiosClient.get(`/api/message/get/${userId}`)
+            console.log(result.data)
+            return result.data
+        } catch (error) {
+            return rejectWithValue({message:error?.response?.data?.message})  
+        }
+    }
+)
 const userSlice = createSlice({
     name:"user",
     initialState:{
         otherUsers:null,
         error:null,
         loading:false,
-        selectedUser:null
+        selectedUser:null,
+        selectedUserChat:null
     },
     reducers:{
         setSelectedUser:(state,action)=>{
+            console.log("selectedUser :",action.payload)
             state.selectedUser = action.payload
         }
     },
@@ -42,6 +57,21 @@ const userSlice = createSlice({
             state.loading = false,
             state.error = action.payload?.message || "something went wrong",
             state.otherUsers = null
+        })        
+        .addCase(getSelectedUserChat.pending,(state,action)=>{
+            state.loading = true,
+            state.error = null,
+            state.selectedUserChat = null
+        })
+        .addCase(getSelectedUserChat.fulfilled,(state,action)=>{
+            state.loading = false,
+            state.error = null,
+            state.selectedUserChat = action.payload
+        })        
+        .addCase(getSelectedUserChat.rejected,(state,action)=>{
+            state.loading = false,
+            state.error = action.payload?.message || "something went wrong",
+            state.selectedUserChat = null
         })        
 
     }
