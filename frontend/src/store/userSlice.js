@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosClient from "../utils/axiosClient";
 import { useSelector } from "react-redux";
-
+import {logout} from "../store/authSlice.js"
 export const getOtherUsers = createAsyncThunk(
     "user/others",
     async(_,{rejectWithValue})=>{
@@ -26,15 +26,16 @@ export const getSelectedUserChat = createAsyncThunk(
         }
     }
 )
-const userSlice = createSlice({
-    name:"user",
-    initialState:{
+const initialState={
         otherUsers:null,
         error:null,
         loading:false,
         selectedUser:null,
         selectedUserChat:null
-    },
+    }
+const userSlice = createSlice({
+    name:"user",
+    initialState,
     reducers:{
         setSelectedUser:(state,action)=>{
             console.log("selectedUser :",action.payload)
@@ -43,6 +44,8 @@ const userSlice = createSlice({
     },
     extraReducers:(builder)=>{
         builder
+        .addCase(logout.fulfilled,()=>initialState)
+
         .addCase(getOtherUsers.pending,(state,action)=>{
             state.loading = true,
             state.error = null,
