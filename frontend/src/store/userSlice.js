@@ -32,7 +32,8 @@ const initialState={
         loading:false,
         selectedUser:null,
         selectedUserChat:null,
-        onlineUsers:null
+        onlineUsers:null,
+        searchData:null
     }
 const userSlice = createSlice({
     name:"user",
@@ -47,6 +48,9 @@ const userSlice = createSlice({
         },
         setSelectedUserChat:(state,action)=>{
             state.selectedUserChat = action.payload
+        },
+        setSearchData:(state,action)=>{
+            state.searchData = action.payload
         }
     },
     extraReducers:(builder)=>{
@@ -86,5 +90,5 @@ const userSlice = createSlice({
 
     }
 })
-export const {setSelectedUser,setOnlineUsers,setSelectedUserChat} = userSlice.actions
+export const {setSelectedUser,setOnlineUsers,setSelectedUserChat,setSearchData} = userSlice.actions
 export default userSlice.reducer

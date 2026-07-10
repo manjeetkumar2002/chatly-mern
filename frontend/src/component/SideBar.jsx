@@ -6,14 +6,29 @@ import { CiSearch } from "react-icons/ci";
 import { RxCross2 } from "react-icons/rx";
 import { CiLogout } from "react-icons/ci";
 import {logout} from "../store/authSlice.js"
-import { setSelectedUser } from '../store/userSlice.js';
+import { setSearchData, setSelectedUser } from '../store/userSlice.js';
+import axiosClient from '../utils/axiosClient.js';
 const SideBar = () => {
   const {user} = useSelector(state=>state.auth)
-  const {otherUsers,selectedUser,onlineUsers} = useSelector(state=>state.user)
+  const {otherUsers,selectedUser,onlineUsers,searchData} = useSelector(state=>state.user)
   const [search,setSearch] = useState(false)
+  const [searchInput,setSearchInput]= useState("")
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  
+  console.log(searchData)
+  const handleSearch = async()=>{
+    try {
+      const result = await axiosClient.get(`/api/user/search?query=${searchInput}`)
+      console.log(result.data)
+      dispatch(setSearchData(result.data))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  useEffect(()=>{
+    if(searchInput)
+    handleSearch()
+  },[searchInput])
   useEffect(()=>{
   },[user])
   return (
@@ -37,7 +52,7 @@ const SideBar = () => {
             <div className='w-[50px] flex items-center justify-center'>
           <CiSearch  className='text-2xl'/>
             </div>
-          <input type="text" placeholder='search users...' className='h-[70%] w-full outline-0 border-0' />
+          <input onChange={(e)=>setSearchInput(e.target.value)} value={searchInput} type="text" placeholder='search users...' className='h-[70%] w-full outline-0 border-0' />
             <RxCross2 onClick={()=>setSearch(false)} className=' cursor-pointer absolute right-3 text-2xl top-1/4'/>
           </div>
           </div>}
