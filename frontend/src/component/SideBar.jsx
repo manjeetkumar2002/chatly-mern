@@ -43,11 +43,11 @@ const SideBar = () => {
           </div>
         </div>
 
-        <div className='mt-2 flex items-center gap-[10px]'>
+        <div className='mt-2 flex items-center gap-[10px] w-full'>
           <div onClick={()=>setSearch(true)} className={`${search?"hidden":"block"} cursor-pointer rounded-full bg-white w-[50px] h-[50px] flex items-center justify-center`}>
           <CiSearch  className='text-2xl'/>
           </div>
-          {search && <div className='w-full'>
+          {search && <div className='w-full relative'>
             <div className='relative rounded-full bg-white h-[50px] flex items-center justify-center'>
             <div className='w-[50px] flex items-center justify-center'>
           <CiSearch  className='text-2xl'/>
@@ -55,6 +55,18 @@ const SideBar = () => {
           <input onChange={(e)=>setSearchInput(e.target.value)} value={searchInput} type="text" placeholder='search users...' className='h-[70%] w-full outline-0 border-0' />
             <RxCross2 onClick={()=>setSearch(false)} className=' cursor-pointer absolute right-3 text-2xl top-1/4'/>
           </div>
+          {/* search users data */}
+          {searchInput.length>0 &&<div className='max-h-[400px] overflow-y-auto absolute top-[60px] bg-white w-full z-[100]'>
+              {searchData?.map((user,index)=>(
+                <div key={index} onClick={()=>{dispatch(setSelectedUser(user));setSearchInput("")}} className='border-b-1 p-[10px] border-b-gray-300 cursor-pointer flex items-center gap-3 bg-white  hover:bg-blue-300' key={index}>
+                   <div className='cursor-pointer shadow-sm shadow-lg bg-white h-[50px] w-[50px] rounded-full overflow-hidden flex items-center justify-center'>
+                    <img className='h-full w-full' src={user?.image || dp} alt="" />
+                  </div>
+                  <div className='text-xl font-semibold'>{user?.name || user?.userName}</div>
+                </div>
+              ))}
+          </div>}
+          
           </div>}
           {/* online users */}
           {!search&&
