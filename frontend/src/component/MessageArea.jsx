@@ -10,6 +10,7 @@ import { IoMdSend } from "react-icons/io";
 import axiosClient from '../utils/axiosClient';
 import ReceiverMessage from './ReceiverMessage';
 import SenderMessage from './SenderMessage';
+import { RxCross2 } from "react-icons/rx";
 const MessageArea = () => {
   const {selectedUser,selectedUserChat} = useSelector(state=>state.user)
   const {user} = useSelector(state=>state.auth)
@@ -20,12 +21,16 @@ const MessageArea = () => {
   const [frontendImage,setFrontendImage] = useState(null)
   const [showEmoji,setShowEmoji] = useState(false);
   const [sending,setSending] = useState(false)
+  const bottom = useRef()
   const handleImage = (e)=>{
     const file = e.target.files[0]
     setBackendImage(file)
     setFrontendImage(URL.createObjectURL(file))
   }
-  
+  const handleResetImage = ()=>{
+    setBackendImage(null)
+    setFrontendImage(null)
+  }
   const handleEmoji = (emojiObject)=>{
    setMessage((prev)=>prev+emojiObject.emoji)
    setShowEmoji(false)
@@ -78,13 +83,19 @@ const MessageArea = () => {
     {
       selectedUser && <div className='relative w-full h-[570px] px-[50px] py-[20px] flex flex-col gap-[30px] overflow-auto'>
         {showEmoji && 
-        <div className='absolute bottom-1 left-[50px]'>
+        <div className='fixed bottom-[80px] left-[520px]'>
           <EmojiPicker onEmojiClick={handleEmoji}  width={250} height={350}/>
         </div>
         }
         {frontendImage && 
-        <div className='absolute bottom-1 right-[100px] rounded-2xl overflow-hidden shadow-lg shadow-gray-200 h-[100px] w-[200px]'>
-          <img src={frontendImage} className='h-full w-full object-cover' alt="" />
+        <div className='fixed bottom-[80px] right-[100px] rounded-2xl overflow-hidden shadow-lg shadow-gray-200 h-[100px] w-[200px]'>
+          <div className='relative p-[10px] h-full rounded-2xl'>
+              <img src={frontendImage} className='h-full w-full object-cover' alt="" />
+          <div onClick={handleResetImage} className='cursor-pointer absolute top-[5px] z-50 right-[5px] bg-red-600 text-white flex justify-center items-center rounded-full p-[5px]'>
+          <RxCross2 />
+          </div>
+          </div>
+          
         </div>
         }
 
@@ -104,7 +115,7 @@ const MessageArea = () => {
         <RiEmojiStickerLine />
       </div>
       <div className='w-full ml-3'>
-        <input onChange={(e)=>setMessage(e.target.value)} value={message} className='border-0 outline-0 w-full h-full text-xl' type="text" placeholder='Message'/>
+        <input onChange={(e)=>setMessage(e.target.value)} value={message} className='border-0 outline-0 w-full h-full text-base' type="text" placeholder='Message'/>
       </div>
       <div onClick={()=>image.current.click()} className='text-2xl cursor-pointer'>
         <FaRegImages />
