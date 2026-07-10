@@ -2,7 +2,7 @@ import React, { useEffect, useState ,useRef } from 'react'
 import { FaArrowLeft } from "react-icons/fa";
 import dp from "../assets/dp.jpg"
 import { useDispatch, useSelector } from 'react-redux';
-import { setSelectedUser } from '../store/userSlice';
+import { setSelectedUser, setSelectedUserChat } from '../store/userSlice';
 import { RiEmojiStickerLine } from "react-icons/ri";
 import { FaRegImages } from "react-icons/fa";
 import EmojiPicker from 'emoji-picker-react';
@@ -13,7 +13,7 @@ import SenderMessage from './SenderMessage';
 import { RxCross2 } from "react-icons/rx";
 const MessageArea = () => {
   const {selectedUser,selectedUserChat} = useSelector(state=>state.user)
-  const {user} = useSelector(state=>state.auth)
+  const {user,socket} = useSelector(state=>state.auth)
   const dispatch = useDispatch()
   const [message,setMessage] = useState("")
   const image = useRef()
@@ -21,9 +21,9 @@ const MessageArea = () => {
   const [frontendImage,setFrontendImage] = useState(null)
   const [showEmoji,setShowEmoji] = useState(false);
   const [sending,setSending] = useState(false)
-  const bottom = useRef()
   const handleImage = (e)=>{
     const file = e.target.files[0]
+    if (!file) return;
     setBackendImage(file)
     setFrontendImage(URL.createObjectURL(file))
   }
@@ -36,6 +36,9 @@ const MessageArea = () => {
    setShowEmoji(false)
   }
   const handleSendMessage = async()=>{
+    if(!message && !backendImage){
+      return 
+    }
     setSending(true)
     try {
       const formData = new FormData()
@@ -45,8 +48,10 @@ const MessageArea = () => {
       if(backendImage)
       formData.append("image",backendImage)
       const response = await axiosClient.post(`/api/message/send/${selectedUser._id}`,formData,{headers: {
+        
     "Content-Type": "multipart/form-data" 
   }})
+   dispatch(setSelectedUserChat([...selectedUserChat,response.data]))
   setBackendImage(null)
   setFrontendImage(null)
   setMessage("")
@@ -60,6 +65,15 @@ const MessageArea = () => {
   }
   useEffect(()=>{
   },[selectedUser])
+
+  useEffect(()=>{
+    socket.on("newMessage",(mess)=>{
+      dispatch(setSelectedUserChat([...selectedUserChat,mess]))
+      console.log(selectedUserChat)
+    })
+
+    return ()=>socket.off("newMessage")
+  },[selectedUserChat,setSelectedUserChat])
   return (
 <div className={`lg:max-w-[70%] md:max-w-[60%] max-w-[100%] ${selectedUser?"block":"md:block hidden"} w-full max-h-screen relative`}>
     {selectedUser && <div className='w-full border-l-1 border-l-gray-300'>
@@ -83,7 +97,7 @@ const MessageArea = () => {
     {
       selectedUser && <div className='relative w-full h-[570px] px-[50px] py-[20px] flex flex-col gap-[30px] overflow-auto'>
         {showEmoji && 
-        <div className='fixed bottom-[80px] left-[520px]'>
+        <div className='fixed bottom-[80px] left-[60px] lg:left-[520px]'>
           <EmojiPicker onEmojiClick={handleEmoji}  width={250} height={350}/>
         </div>
         }
@@ -102,7 +116,7 @@ const MessageArea = () => {
         {/* user messages mapping */}
         {
           selectedUser && selectedUserChat?.map((chat,index)=>(
-            chat.sender === user._id ? <SenderMessage image={chat.image} message={chat.message}/>:<ReceiverMessage image={chat.image} message={chat.message}/>
+            chat.sender === user._id ? <SenderMessage key={index} image={chat.image} message={chat.message}/>:<ReceiverMessage key={index} image={chat.image} message={chat.message}/>
           ))
         }
     </div>
@@ -117,13 +131,15 @@ const MessageArea = () => {
       <div className='w-full ml-3'>
         <input onChange={(e)=>setMessage(e.target.value)} value={message} className='border-0 outline-0 w-full h-full text-base' type="text" placeholder='Message'/>
       </div>
-      <div onClick={()=>image.current.click()} className='text-2xl cursor-pointer'>
+      <div onClick={(e)=>{e.stopPropagation(); image.current.click()}} className='text-2xl cursor-pointer'>
         <FaRegImages />
       </div>
-      <input className='text-transparent absolute right-[40px]' onChange={handleImage} type="file"accept='image/*' ref={image} />
+      <input className='hidden text-transparent absolute right-[40px]' onChange={handleImage} type="file"accept='image/*' ref={image} />
+      {(message || backendImage) &&( 
       <button disabled={sending} onClick={handleSendMessage} className='text-2xl ml-4 cursor-pointer'>
       <IoMdSend  />
-    </button>
+    </button>)
+}
     </div>
     
     </div>

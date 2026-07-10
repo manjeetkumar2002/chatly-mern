@@ -8,6 +8,9 @@ import { checkAuth } from './store/authSlice'
 import { getOtherUsers } from './store/userSlice'
 import {getSelectedUserChat} from "./store/userSlice"
 import Profile from './pages/Profile'
+import {io} from "socket.io-client"
+import { setSocket } from './store/authSlice'
+import { setOnlineUsers } from './store/userSlice'
 const App = () => {
   const dispatch = useDispatch();
   const {isAuthenticated,user,loading} = useSelector((state)=>state.auth);
@@ -22,12 +25,31 @@ const App = () => {
        dispatch(getOtherUsers())
     }
   },[dispatch,isAuthenticated])
+
   useEffect(()=>{
     if(isAuthenticated&&selectedUser){
-      dispatch(getSelectedUserChat(selectedUser._id))
+      dispatch(getSelectedUserChat(selectedUser?._id))
       console.log("dispatch chat")
     }
   },[dispatch,isAuthenticated,selectedUser])
+
+
+  // socket connection
+  useEffect(()=>{
+    if(user){
+      const socketio = io("http://localhost:3000",{
+      query:{
+        userId:user?._id
+      }
+    })
+    dispatch(setSocket(socketio))
+    socketio.on("getOnlineUsers",(users)=>{
+      dispatch(setOnlineUsers(users))
+    })
+    return ()=>{socketio.close()}
+    }
+    
+  },[user])
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center">
       <span className="loading loading-spinner loading-lg"></span>

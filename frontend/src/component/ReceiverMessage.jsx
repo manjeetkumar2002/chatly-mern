@@ -1,9 +1,16 @@
 import React from "react";
+import { useEffect ,useRef } from "react";
 
 const ReceiverMessage = ({ image, message }) => {
+  const scroll = useRef(null);
+  useEffect(() => {
+  scroll?.current?.scrollIntoView({
+    behavior: "smooth",
+  });
+}, [message, image]);
   return (
     <div className="w-full flex justify-start px-3 my-2">
-      <div className="max-w-[70%] bg-gray-200 text-black rounded-xl rounded-bl-none p-3 shadow-md">
+      <div className="max-w-[70%] bg-gray-200 text-black rounded-xl rounded-bl-none p-3 shadow-md" ref={scroll}>
         {image && (
           <img
             src={image}
