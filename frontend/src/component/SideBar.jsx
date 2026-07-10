@@ -9,13 +9,12 @@ import {logout} from "../store/authSlice.js"
 import { setSelectedUser } from '../store/userSlice.js';
 const SideBar = () => {
   const {user} = useSelector(state=>state.auth)
-  const {otherUsers,selectedUser} = useSelector(state=>state.user)
+  const {otherUsers,selectedUser,onlineUsers} = useSelector(state=>state.user)
   const [search,setSearch] = useState(false)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   
   useEffect(()=>{
-
   },[user])
   return (
     <div className={`w-full lg:max-w-[30%] md:max-w-[40%] max-w-[100%] ${selectedUser?"hidden md:block":"block"} bg-blue-100 h-screen relative`}>
@@ -29,11 +28,11 @@ const SideBar = () => {
           </div>
         </div>
 
-        <div className='mt-2'>
+        <div className='mt-2 flex items-center gap-[10px]'>
           <div onClick={()=>setSearch(true)} className={`${search?"hidden":"block"} cursor-pointer rounded-full bg-white w-[50px] h-[50px] flex items-center justify-center`}>
           <CiSearch  className='text-2xl'/>
           </div>
-          {search && <div>
+          {search && <div className='w-full'>
             <div className='relative rounded-full bg-white h-[50px] flex items-center justify-center'>
             <div className='w-[50px] flex items-center justify-center'>
           <CiSearch  className='text-2xl'/>
@@ -42,7 +41,23 @@ const SideBar = () => {
             <RxCross2 onClick={()=>setSearch(false)} className=' cursor-pointer absolute right-3 text-2xl top-1/4'/>
           </div>
           </div>}
-          
+          {/* online users */}
+          {!search&&
+          <div className='overflow-x-auto flex gap-[10px]'> 
+            {
+              otherUsers?.map((user,index)=>(
+                onlineUsers?.includes(user._id) &&
+              <div  onClick={()=>{dispatch(setSelectedUser(user))}}  key={index} className=' relative rounded-full p-[5px]  overflow-hidden'>
+                <div  className='cursor-pointer  h-[50px] w-[50px] shadow-sm shadow-lg bg-white rounded-full overflow-hidden flex items-center justify-center'>
+            <img className='h-full w-full' src={user?.image || dp} alt="" />
+          </div>
+          <span className='z-[100] absolute bottom-3 right-[5px] rounded-full w-[10px] h-[10px] bg-green-400'></span>
+              </div>
+                
+              ))
+            }
+          </div>
+}
         </div>
       </div>
         {/* others user list */}

@@ -13,7 +13,7 @@ import { setSocket } from './store/authSlice'
 import { setOnlineUsers } from './store/userSlice'
 const App = () => {
   const dispatch = useDispatch();
-  const {isAuthenticated,user,loading} = useSelector((state)=>state.auth);
+  const {isAuthenticated,user,loading,socket} = useSelector((state)=>state.auth);
   const {selectedUser} = useSelector(state=>state.user)
   // check initial authentication
   useEffect(() => {
@@ -50,6 +50,8 @@ const App = () => {
     }
     
   },[user])
+
+
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center">
       <span className="loading loading-spinner loading-lg"></span>
