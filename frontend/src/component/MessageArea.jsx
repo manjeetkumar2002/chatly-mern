@@ -98,7 +98,7 @@ const MessageArea = () => {
           </div>
           <div className='flex-1 min-w-0'>
             <p className='text-white font-semibold text-lg truncate'>{selectedUser?.name || selectedUser?.userName}</p>
-            {onlineUsers.includes(selectedUser._id)?
+            {onlineUsers?.includes(selectedUser._id)?
             <p className='text-indigo-100/70 text-xs'>Online</p>:
             <p className='text-indigo-100/70 text-xs'>Offline</p>
             }
