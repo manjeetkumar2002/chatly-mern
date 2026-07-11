@@ -36,7 +36,7 @@ const App = () => {
   // socket connection
   useEffect(()=>{
     if(user){
-      const socket_url = import.meta.env.MODE === "development"?"http://localhost:3000":import.meta.env.SOCKET_URL
+      const socket_url = import.meta.env.MODE === "development"?"http://localhost:3000":import.meta.env.VITE_SOCKET_URL
       const socketio = io(socket_url,{
       query:{
         userId:user?._id
