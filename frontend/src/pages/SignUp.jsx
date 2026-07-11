@@ -4,7 +4,7 @@ import axiosClient from '../utils/axiosClient';
 import Error from '../component/Error';
 import { signup } from '../store/authSlice';
 import { useDispatch, useSelector } from "react-redux"
-
+import validator from "validator"
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [userName, setUserName] = useState("")
@@ -13,11 +13,40 @@ const SignUp = () => {
   const navigate = useNavigate()
   const { error, loading, isAuthenticated } = useSelector((state) => state.auth)
   const dispatch = useDispatch()
-
+  const [emailError,setEmailError] = useState(null) 
+  const [passwordError,setPasswordError] = useState(null) 
   const handleSignUp = (e) => {
-    e.preventDefault()
-    dispatch(signup({ userName, emailId, password }))
+  e.preventDefault();
+
+  setEmailError(null);
+  setPasswordError(null);
+
+  if (!userName.trim()) {
+    return;
   }
+
+  if (!validator.isEmail(emailId.trim())) {
+    setEmailError("Please enter a valid email.");
+    return;
+  }
+
+  if (
+    !validator.isStrongPassword(password, {
+      minLength: 8,
+      minLowercase: 1,
+      minUppercase: 1,
+      minNumbers: 1,
+      minSymbols: 1,
+    })
+  ) {
+    setPasswordError(
+      "Password must be at least 8 characters and include uppercase, lowercase, a number, and a special character."
+    );
+    return;
+  }
+
+  dispatch(signup({ userName: userName.trim(), emailId: emailId.trim(), password }));
+};
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -134,7 +163,15 @@ const SignUp = () => {
                 I agree to the <span className='text-indigo-500 hover:text-indigo-600 transition-colors font-medium'>Terms of Service</span> and <span className='text-indigo-500 hover:text-indigo-600 transition-colors font-medium'>Privacy Policy</span>
               </label>
             </div>
-
+            {/* errors */}
+            <div>
+              {emailError&&
+            <div className='text-red-500 text-base text-center'>{emailError}</div>
+              }
+              {passwordError&&
+            <div className='text-red-500 text-base text-center'>{passwordError}</div>
+              }
+            </div>
             {/* Submit Button */}
             <div className='pt-2'>
               <button 
