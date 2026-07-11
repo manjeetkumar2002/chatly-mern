@@ -79,7 +79,7 @@ const MessageArea = () => {
   }, [selectedUserChat, setSelectedUserChat])
   const {onlineUsers} = useSelector(state=>state.user)
   return (
-    <div className={`lg:max-w-[70%] md:max-w-[60%] max-w-[100%] ${selectedUser ? "block" : "md:block hidden"} w-full max-h-screen relative bg-gradient-to-br from-slate-50 via-white to-indigo-50/30`}>
+    <div className={`lg:max-w-[70%] h-full md:max-w-[60%] max-w-[100%] ${selectedUser ? "block" : "md:block hidden"} w-full max-h-screen relative bg-gradient-to-br from-slate-50 via-white to-indigo-50/30`}>
       
       {/* Chat Header */}
       {selectedUser && (
