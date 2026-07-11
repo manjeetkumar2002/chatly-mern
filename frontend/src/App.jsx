@@ -57,10 +57,13 @@ const App = () => {
     socketio.on("getOnlineUsers",(users)=>{
       dispatch(setOnlineUsers(users))
     })
-    return ()=>{socketio.close()}
+    return () => {
+  socketio.off("getOnlineUsers");
+  socketio.disconnect();
+};
     }
     
-  },[user])
+  },[user,isAuthenticated,dispatch])
 
 
   if (loading) {
