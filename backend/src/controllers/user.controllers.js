@@ -26,7 +26,7 @@ export const getOtherUsers =async (req,res)=>{
     try {
         const result = await User.find({
             _id:{$ne:req.userId}
-        })
+        }).select("-password")
         return res.status(200).json(result)
     } catch (error) {
          console.error(error);
@@ -52,7 +52,7 @@ export const search = async(req,res)=>{
                 {name:{$regex:query,$options:"i"}},
                 {userName:{$regex:query,$options:"i"}}
             ]
-        })
+        }).select("-password")
 
         return res.status(200).json(users)
     } catch (error) {

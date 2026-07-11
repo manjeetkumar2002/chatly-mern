@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: import.meta.env.NODE_ENV ==="development"? "http://localhost:3000" : import.meta.env.VITE_API_BASE_URL,
   timeout: 10000, 
   withCredentials:true,
   headers: {
