@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 const Home = () => {
   
   return (
-    <div className='flex w-screen h-screen'>
+    <div className='flex w-screen h-screen overflow-x-hidden'>
       <SideBar></SideBar>
       <MessageArea></MessageArea>
     </div>

@@ -98,11 +98,11 @@ const Login = () => {
             </div>
 
             {/* Forgot Password */}
-            <div className='text-right'>
+            {/* <div className='text-right'>
               <button type="button" className='text-xs font-medium text-indigo-500 hover:text-indigo-600 transition-colors'>
                 Forgot password?
               </button>
-            </div>
+            </div> */}
 
             {/* Submit Button */}
             <div className='pt-4'>

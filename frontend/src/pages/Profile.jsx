@@ -56,7 +56,7 @@ const Profile = () => {
             {/* Back Button */}
             <div 
                 onClick={() => navigate("/")} 
-                className='cursor-pointer rounded-xl h-[48px] w-[48px] bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600 text-white font-semibold text-xl flex items-center justify-center fixed top-4 left-4 shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/35 transition-all duration-200 hover:scale-105'
+                className='z-[100] cursor-pointer rounded-xl h-[48px] w-[48px] bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600 text-white font-semibold text-xl flex items-center justify-center fixed top-4 left-4 shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/35 transition-all duration-200 hover:scale-105'
             >
                 <FaArrowLeft />
             </div>

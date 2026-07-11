@@ -38,7 +38,7 @@ const SideBar = () => {
   }, [user])
   
   return (
-    <div className={`w-full lg:max-w-[30%] md:max-w-[40%] max-w-[100%] ${selectedUser ? "hidden md:block" : "block"} bg-gradient-to-b from-indigo-50/50 via-white to-white h-screen relative border-r border-indigo-100/30`}>
+    <div className={`w-full h-full lg:max-w-[30%] md:max-w-[40%] max-w-[100%] ${selectedUser ? "hidden md:block" : "block"} bg-gradient-to-b from-indigo-50/50 via-white to-white h-screen relative border-r border-indigo-100/30`}>
       
       {/* Header Section */}
       <div className='relative bg-gradient-to-br from-indigo-600 via-indigo-500 to-purple-600 h-[240px] rounded-b-[80px] shadow-xl shadow-indigo-500/10 p-6'>
@@ -144,8 +144,9 @@ const SideBar = () => {
       </div>
       
       {/* Users List */}
+      <div>
+           <p className='px-4 mt-2 mb-0 text-xs font-semibold text-slate-400 uppercase tracking-wider px-1'>All Contacts</p>
       <div className='px-4 py-3 overflow-y-auto h-[calc(100vh-280px)] scrollbar-thin scrollbar-thumb-indigo-200 scrollbar-track-transparent'>
-        <p className='text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 px-1'>All Contacts</p>
         {otherUsers?.map((user, index) => (
           <div 
             onClick={() => dispatch(setSelectedUser(user))} 
@@ -179,6 +180,8 @@ const SideBar = () => {
           </div>
         )}
       </div>
+      </div>
+       
       
       {/* Logout Button */}
       <div 
