@@ -7,7 +7,7 @@ export const editProfile = async (req,res)=>{
         if(req.file){
             image = await uploadOnCloudinary(req.file.path)
         }
-        const user = await User.findByIdAndUpdate(req.userId,{name:name,image:image})
+        const user = await User.findByIdAndUpdate(req.userId,{name:name,image:image},{new:true}).select("-password")
         return res.status(200).json(user)
     } catch (error) {
         console.error(error);

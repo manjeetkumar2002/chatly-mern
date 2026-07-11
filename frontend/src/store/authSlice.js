@@ -64,7 +64,10 @@ const authSlice = createSlice({
       },
       setSocket:(state,action)=>{
         state.socket = action.payload
-      }
+      },
+      setUser:(state,action)=>{
+            state.user = action.payload
+        }
     },
     extraReducers:(builder) => {
     builder
@@ -135,5 +138,5 @@ const authSlice = createSlice({
     }
 })
 
-export const {setError,setSocket} = authSlice.actions
+export const {setError,setSocket,setUser} = authSlice.actions
 export default authSlice.reducer
