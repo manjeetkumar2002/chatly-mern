@@ -47,7 +47,6 @@ const MessageArea = () => {
     setSending(true)
     try {
       const formData = new FormData()
-      console.log(message)
       if (message)
         formData.append("message", message)
       if (backendImage)
@@ -61,7 +60,6 @@ const MessageArea = () => {
       setBackendImage(null)
       setFrontendImage(null)
       setMessage("")
-      console.log(response)
     } catch (error) {
       console.log(error)
     } finally {
@@ -75,7 +73,6 @@ const MessageArea = () => {
   useEffect(() => {
     socket.on("newMessage", (mess) => {
       dispatch(setSelectedUserChat([...selectedUserChat, mess]))
-      console.log(selectedUserChat)
     })
 
     return () => socket.off("newMessage")

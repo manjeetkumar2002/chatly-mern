@@ -17,12 +17,9 @@ const SideBar = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   
-  console.log(searchData)
-  
   const handleSearch = async () => {
     try {
       const result = await axiosClient.get(`/api/user/search?query=${searchInput}`)
-      console.log(result.data)
       dispatch(setSearchData(result.data))
     } catch (error) {
       console.log(error)

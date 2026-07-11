@@ -26,7 +26,6 @@ export const login = createAsyncThunk(
 export const logout = createAsyncThunk(
   'auth/logout',
   async(_,{rejectWithValue})=>{
-    console.log("logout api called")
     try {
       const response = await axiosClient.get("/api/auth/logout")
       return null

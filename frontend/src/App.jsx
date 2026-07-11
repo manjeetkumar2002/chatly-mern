@@ -29,7 +29,6 @@ const App = () => {
   useEffect(()=>{
     if(isAuthenticated&&selectedUser){
       dispatch(getSelectedUserChat(selectedUser?._id))
-      console.log("dispatch chat")
     }
   },[dispatch,isAuthenticated,selectedUser])
 
@@ -37,8 +36,8 @@ const App = () => {
   // socket connection
   useEffect(()=>{
     if(user){
-      const SOCKET_URL = import.meta.env.NODE_ENV === "development"?"http://localhost:3000":import.meta.env.SOCKET_URL
-      const socketio = io(SOCKET_URL,{
+      const socket_url = import.meta.env.MODE === "development"?"http://localhost:3000":import.meta.env.SOCKET_URL
+      const socketio = io(socket_url,{
       query:{
         userId:user?._id
       }

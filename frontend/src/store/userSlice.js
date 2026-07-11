@@ -17,9 +17,7 @@ export const getSelectedUserChat = createAsyncThunk(
     'user/chat',
     async(userId,{rejectWithValue})=>{
         try {
-            console.log(userId)
             const result = await axiosClient.get(`/api/message/get/${userId}`)
-            console.log(result.data)
             return result.data
         } catch (error) {
             return rejectWithValue({message:error?.response?.data?.message})  
@@ -40,7 +38,6 @@ const userSlice = createSlice({
     initialState,
     reducers:{
         setSelectedUser:(state,action)=>{
-            console.log("selectedUser :",action.payload)
             state.selectedUser = action.payload
         },
         setOnlineUsers:(state,action)=>{
