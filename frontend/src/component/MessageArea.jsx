@@ -83,7 +83,7 @@ const MessageArea = () => {
       
       {/* Chat Header */}
       {selectedUser && (
-        <div className='w-full bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 h-[72px] flex items-center gap-3 px-4 shadow-lg shadow-indigo-500/10 relative z-10'>
+        <div className='w-full bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 h-[72px] flex items-center gap-3 px-4 shadow-lg shadow-indigo-500/10 fixed top-0 z-10'>
           <div 
             onClick={() => dispatch(setSelectedUser(null))} 
             className='cursor-pointer rounded-full h-[44px] w-[44px] text-white text-xl flex items-center justify-center hover:bg-white/10 transition-colors duration-200'
