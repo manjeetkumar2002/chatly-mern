@@ -42,6 +42,17 @@ const App = () => {
         userId:user?._id
       }
     })
+    socketio.on("connect", () => {
+      console.log("✅ Connected", socketio.id);
+    });
+
+    socketio.on("connect_error", (err) => {
+      console.log("❌ Connect Error:", err.message);
+    });
+
+    socketio.on("disconnect", (reason) => {
+      console.log("❌ Disconnected:", reason);
+    });
     dispatch(setSocket(socketio))
     socketio.on("getOnlineUsers",(users)=>{
       dispatch(setOnlineUsers(users))
