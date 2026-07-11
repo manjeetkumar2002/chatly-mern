@@ -3,10 +3,7 @@ import SideBar from '../component/SideBar.jsx'
 import MessageArea from '../component/MessageArea.jsx'
 import { useSelector } from 'react-redux'
 const Home = () => {
-  const {user} = useSelector(state=>state.auth)
-  useEffect(()=>{
-
-  },[user])
+  
   return (
     <div className='flex w-screen h-screen'>
       <SideBar></SideBar>
